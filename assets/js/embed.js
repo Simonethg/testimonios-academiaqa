@@ -20,7 +20,7 @@ async function iniciar() {
   try {
     const datos = await cargarDatos();
     const lista = datos.mensajes.filter((m) => !curso || m.curso === curso).slice(0, max);
-    $('mensajes').replaceChildren(...lista.map((m) => tarjetaMensaje(m, { cursos: datos.cursos, clases: datos.testingai.clases })));
+    $('mensajes').replaceChildren(...lista.map((m) => tarjetaMensaje(m, datos)));
     $('vacio').hidden = lista.length > 0;
     const enlace = new URL('index.html', window.location.href);
     if (curso) enlace.searchParams.set('curso', curso);

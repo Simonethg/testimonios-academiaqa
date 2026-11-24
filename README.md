@@ -1,45 +1,65 @@
-# Testimonios AcademiaQA
+# Muro de gratitud · AcademiaQA
 
-Mensajes de las personas que hicieron los cursos de AcademiaQA y de Simoneth Gomez (@SimonethG · @academia_qa), clase por clase. Empieza con la cohorte en vivo de TestingAI (octubre a diciembre de 2026) y sigue sumando los mensajes de la Carrera QA con IA y de los demás cursos.
+Los mensajes de las personas que hicieron los cursos de AcademiaQA y de Simoneth Gomez (@SimonethG · @academia_qa). Por ahora tiene dos cursos, TestingAI (en vivo) y la Carrera QA con IA (asincrónica), y se van sumando los cursos que incluyan el muro al final.
 
-- **Página:** una línea de tiempo donde cada punto es una clase de TestingAI y se enciende cuando alguien deja un mensaje, con contadores, filtro por curso y las tarjetas de los mensajes.
-- **Widget:** `embed.html`, para mostrar los mensajes en las páginas de los cursos de www.simonethg.com y academiaqa.com.
+- **Muro:** una sola pantalla, sin scroll, con selector de curso, contadores y los mensajes paginados. Con TestingAI elegido se ve además la línea de clases: cada punto es una clase y se enciende cuando tiene mensajes.
+- **Widget:** `embed.html?curso=...`, para que la página de cada curso en www.simonethg.com y academiaqa.com muestre sus propios mensajes.
 - **Datos abiertos:** `data/testimonios.json`, un JSON público que cualquier sitio puede leer.
 
 Inspirado en la idea de [Proof of Gratitude](https://github.com/mariaelisaaraya/Proof-of-Gratitude), de María Elisa Araya. El código de este repo es propio: no se copió código de ese proyecto.
 
 ## ¿Cómo se suma un mensaje?
 
-Solo por **Pull Request**. La guía para alumnos está en [CONTRIBUTING.md](CONTRIBUTING.md).
+Solo por **Pull Request**, con **un archivo por persona** para que no haya choques. La guía para alumnos está en [CONTRIBUTING.md](CONTRIBUTING.md).
 
-1. La persona agrega su entrada a `data/testimonios.json` (el formulario de la página se la arma) y abre un Pull Request con la plantilla, que incluye la casilla de consentimiento.
-2. La acción **Validar testimonios** (`.github/workflows/validar-testimonios.yml`) revisa el formato, los largos y que no haya email, teléfono, links ni HTML. Si el PR viene de un fork y toca otro archivo, falla.
-3. Simoneth revisa el texto y lo une. **Unido = aprobado:** todo lo que está en `main` se publica.
+1. La persona toca «Dejar mi mensaje», elige su curso y el formulario le arma el archivo `data/testimonios/<curso>/<AAAA-MM-DD>-<nombre>.json`. El botón «Crear mi archivo en GitHub» abre el editor de GitHub con el archivo ya completado.
+2. Abre el Pull Request con la plantilla, que incluye la casilla de consentimiento.
+3. La acción **Validar testimonios** (`.github/workflows/validar-testimonios.yml`) revisa cada archivo: campos, largos, que el curso esté en `data/cursos.json`, que la carpeta, la fecha y el id coincidan con el nombre, y que no haya email, teléfono, links ni HTML. Si el PR viene de un fork, solo puede **agregar** archivos dentro de `data/testimonios/<curso>/`.
+4. Simoneth revisa el texto y lo une. **Unido = aprobado.**
+5. La acción **Publicar en GitHub Pages** (`.github/workflows/publicar-pages.yml`) junta todos los archivos en `data/testimonios.json` y publica el sitio. No hace falta servidor.
 
 La página y el widget, además, vuelven a validar cada entrada en el navegador y no muestran las que no cumplan las reglas o no tengan `consentimiento_publicar: true`.
+
+## Sumar un curso nuevo
+
+1. Agregá el curso a `data/cursos.json`:
+   ```json
+   {
+     "id": "nombre-del-curso",
+     "nombre": { "es": "Nombre del curso (modalidad)", "en": "Course name (format)" },
+     "nombre_corto": { "es": "Nombre corto", "en": "Short name" },
+     "cohorte_actual": "asincronica",
+     "clases": null,
+     "url": "https://academiaqa.com/courses/..."
+   }
+   ```
+2. Creá la carpeta `data/testimonios/nombre-del-curso/` con un archivo vacío `.gitkeep`.
+3. Si el curso tiene clases en vivo con fecha, creá un archivo como `data/clases-testingai.json` y poné su ruta en `clases`; el muro muestra la línea de clases cuando se elige ese curso. Si es asincrónico, dejá `"clases": null`.
+4. Corré `npm test` y `npm run validar`. El curso aparece solo en el selector del muro y del formulario, y en el widget con `?curso=nombre-del-curso`.
 
 ## Estructura
 
 ```
-index.html                 Página principal (línea de tiempo, mensajes, cómo sumarse, privacidad)
-embed.html                 Widget para insertar en otros sitios
-data/testimonios.json      Mensajes reales (empieza vacío)
-data/ejemplos.json         Tres mensajes de muestra; solo se ven con ?demo=1
-data/cursos.json           Cursos válidos
-data/clases-testingai.json Clases de la cohorte TestingAI 2026-10
-assets/js/validar.js       Reglas compartidas por la página, el widget y la acción de GitHub
-assets/js/                 Resto del código (sin dependencias ni librerías externas)
-assets/css/estilos.css     Estilos (modo claro y oscuro)
-assets/fonts/              Kanit autoalojada (SIL Open Font License 1.1)
-i18n/es.json, i18n/en.json Textos en español e inglés
-scripts/                   Validador y tests (Node 22, sin dependencias)
+index.html                     Muro (una pantalla) con los diálogos «Dejar mi mensaje» y «Privacidad»
+embed.html                     Widget para insertar en otros sitios
+data/cursos.json               Cursos habilitados
+data/clases-testingai.json     Clases de la cohorte TestingAI 2026-10
+data/testimonios/<curso>/      Un archivo por mensaje (lo que suman los alumnos)
+data/testimonios.json          Índice público generado con npm run generar (no se edita a mano)
+data/ejemplos.json             Mensajes de muestra de los dos cursos; solo se ven con ?demo=1
+assets/js/validar.js           Reglas compartidas por el muro, el widget y las acciones de GitHub
+assets/js/                     Resto del código (sin dependencias ni librerías externas)
+assets/css/estilos.css         Estilos (modo claro y oscuro)
+assets/fonts/                  Kanit autoalojada (SIL Open Font License 1.1)
+i18n/es.json, i18n/en.json     Textos en español e inglés
+scripts/                       Validador, generador del índice y tests (Node 22, sin dependencias)
 ```
 
 ## Formato de cada mensaje
 
 ```json
 {
-  "id": "ana-clase-08",
+  "id": "2026-12-02-ana",
   "curso": "testingai-vivo",
   "cohorte": "2026-10",
   "fecha": "2026-12-02",
@@ -51,22 +71,24 @@ scripts/                   Validador y tests (Node 22, sin dependencias)
 }
 ```
 
-`clase_relacionada` y `rol_o_pais` son opcionales. No hay campos de email ni de teléfono, y la validación rechaza cualquier campo que no esté en esta lista.
+`clase_relacionada` (solo para cursos con clases) y `rol_o_pais` son opcionales. No hay campos de email ni de teléfono, y la validación rechaza cualquier campo que no esté en esta lista.
 
 ## Correrlo en tu computadora
 
 ```bash
+npm run generar                  # arma data/testimonios.json desde data/testimonios/
 python3 -m http.server 8080      # o cualquier servidor estático
-# http://localhost:8080/             página real
-# http://localhost:8080/?demo=1      con los mensajes de muestra
-# http://localhost:8080/embed.html?curso=testingai-vivo
+# http://localhost:8080/                              muro real
+# http://localhost:8080/?demo=1                       con los mensajes de muestra
+# http://localhost:8080/?curso=testingai-vivo         muro de un curso
+# http://localhost:8080/embed.html?curso=carrera-qa-ia
 npm test                         # tests de las reglas
-npm run validar                  # valida data/testimonios.json
+npm run validar                  # valida cada archivo
 ```
 
 ## Publicarlo en GitHub Pages
 
-Cuando Simoneth lo apruebe: repo público `Simonethg/testimonios-academiaqa`, **Settings → Pages → Deploy from a branch → `main` / root**. Queda en `https://simonethg.github.io/testimonios-academiaqa/`. Si el repo termina con otro nombre, cambiá `REPO_URL` en `assets/js/config.js`.
+Cuando Simoneth lo apruebe: repo público `Simonethg/testimonios-academiaqa` y **Settings → Pages → Source: GitHub Actions**. En cada cambio de `main`, la acción valida, genera `data/testimonios.json` y publica en `https://simonethg.github.io/testimonios-academiaqa/`. Si el repo termina con otro nombre, cambiá `REPO_URL` en `assets/js/config.js`.
 
 Conviene activar en **Settings → Branches** la regla de `main` que pide el check «Validar testimonios» en verde antes de unir.
 
@@ -100,7 +122,7 @@ Parámetros de `embed.html`:
 
 | Parámetro | Valores | Para qué |
 |---|---|---|
-| `curso` | `testingai-vivo`, `carrera-qa-ia`, `otro-academiaqa` | Muestra solo ese curso. Sin `curso`, muestra todos. |
+| `curso` | `testingai-vivo`, `carrera-qa-ia` (o cualquier id de `data/cursos.json`) | Muestra solo ese curso. Sin `curso`, muestra todos. |
 | `lang` | `es`, `en` | Idioma de los textos del widget (los mensajes quedan como los escribió cada persona). |
 | `tema` | `claro`, `oscuro` | Fuerza el modo. Sin `tema`, sigue la preferencia del sistema. |
 | `max` | 1 a 24 | Cuántos mensajes mostrar (los más nuevos primero). Por defecto, 6. |
@@ -110,7 +132,7 @@ Si el sitio tiene una Content Security Policy, tiene que permitir `frame-src htt
 
 ### Opción 2: leer el JSON y pintarlo con el estilo del sitio
 
-GitHub Pages sirve los archivos con `Access-Control-Allow-Origin: *`, así que se pueden leer desde cualquier dominio:
+`data/testimonios.json` es una lista con todos los mensajes publicados, los más nuevos primero, y la genera la acción de Pages. GitHub Pages sirve los archivos con `Access-Control-Allow-Origin: *`, así que se pueden leer desde cualquier dominio:
 
 ```html
 <ul id="testimonios"></ul>
@@ -139,12 +161,13 @@ Aunque los datos ya pasaron la validación, el sitio que los muestre tiene que u
 
 ## Privacidad
 
-Solo se publica lo que la persona escribe: su nombre visible, su rol o país (si lo agrega) y su mensaje. No se piden emails ni teléfonos, y la validación rechaza los mensajes que los incluyan. No hay anuncios, analítica ni rastreadores: la página no hace pedidos a ningún otro sitio. Para quitar un mensaje, alcanza con un Pull Request que lo borre.
+Solo se publica lo que la persona escribe: su nombre visible, su rol o país (si lo agrega) y su mensaje. No se piden emails ni teléfonos, y la validación rechaza los mensajes que los incluyan. No hay anuncios, analítica ni rastreadores: la página no hace pedidos a ningún otro sitio. Para quitar un mensaje, alcanza con un Pull Request que borre su archivo.
 
 ## Calidad
 
-- Accesibilidad: WCAG 2.2 AA, revisada con axe en escritorio y móvil, en modo claro y oscuro; se usa con teclado y respeta `prefers-reduced-motion`.
-- Seguridad: Content Security Policy sin scripts en línea, todo el texto de los alumnos se pinta con `textContent`, sin dependencias externas, y la acción de GitHub corre con permisos de solo lectura y acciones fijadas por SHA.
+- Accesibilidad: WCAG 2.2 AA, revisada con axe en escritorio y móvil, en modo claro y oscuro, también con los diálogos abiertos. Se usa con teclado (los diálogos atrapan el foco, se cierran con Escape y devuelven el foco) y respeta `prefers-reduced-motion`.
+- Una pantalla: el muro calcula cuántas tarjetas entran en el alto disponible y pagina el resto. Si no entra ni una (por ejemplo, con zoom al 200 %), el muro se desplaza por dentro y no se pierde contenido.
+- Seguridad: Content Security Policy sin scripts en línea, todo el texto de los alumnos se pinta con `textContent`, sin dependencias externas, y las acciones de GitHub corren con permisos mínimos y fijadas por SHA.
 - Idiomas: español e inglés.
 
 ## Licencia

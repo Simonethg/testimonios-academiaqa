@@ -1,5 +1,18 @@
 [
-  { "id": "testingai-vivo", "nombre": { "es": "TestingAI en vivo", "en": "TestingAI live" }, "url": "https://academiaqa.com" },
-  { "id": "carrera-qa-ia", "nombre": { "es": "Carrera QA con IA", "en": "QA Career with AI" }, "url": "https://academiaqa.com" },
-  { "id": "otro-academiaqa", "nombre": { "es": "Otro curso de AcademiaQA", "en": "Other AcademiaQA course" }, "url": "https://academiaqa.com" }
+  {
+    "id": "testingai-vivo",
+    "nombre": { "es": "TestingAI (en vivo)", "en": "TestingAI (live)" },
+    "nombre_corto": { "es": "TestingAI", "en": "TestingAI" },
+    "cohorte_actual": "2026-10",
+    "clases": "data/clases-testingai.json",
+    "url": "https://academiaqa.com/courses/testingai/"
+  },
+  {
+    "id": "carrera-qa-ia",
+    "nombre": { "es": "Carrera QA con IA (asincrónica)", "en": "QA Career with AI (self-paced)" },
+    "nombre_corto": { "es": "Carrera QA con IA", "en": "QA Career with AI" },
+    "cohorte_actual": "asincronica",
+    "clases": null,
+    "url": "https://academiaqa.com/courses/carrera-qa-con-ia/"
+  }
 ]

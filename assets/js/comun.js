@@ -61,13 +61,13 @@ export function formatearFecha(iso, opciones = { day: 'numeric', month: 'short' 
 export const esDemo = () => params.get('demo') === '1';
 export const esEjemplo = (m) => typeof m.id === 'string' && m.id.startsWith('ejemplo-');
 
-/** Carga cursos, clases y mensajes. Con ?demo=1 suma los ejemplos. */
+/** Carga cursos, clases de los cursos que las tienen y mensajes. Con ?demo=1 suma los ejemplos. */
 export async function cargarDatos() {
-  const [cursos, testingai, reales] = await Promise.all([
-    leerJSON('data/cursos.json'),
-    leerJSON('data/clases-testingai.json'),
-    leerJSON('data/testimonios.json'),
-  ]);
+  const [cursos, reales] = await Promise.all([leerJSON('data/cursos.json'), leerJSON('data/testimonios.json')]);
+  const clasesPorCurso = {};
+  await Promise.all(cursos.filter((c) => c.clases).map(async (c) => {
+    clasesPorCurso[c.id] = await leerJSON(c.clases);
+  }));
   let lista = Array.isArray(reales) ? reales : [];
   if (esDemo()) {
     const ejemplos = await leerJSON('data/ejemplos.json');
@@ -75,16 +75,20 @@ export async function cargarDatos() {
   }
   const ctx = {
     cursos: cursos.map((c) => c.id),
-    clases: { [testingai.curso]: testingai.clases.map((c) => c.id) },
+    clases: Object.fromEntries(Object.entries(clasesPorCurso).map(([k, v]) => [k, v.clases.map((x) => x.id)])),
   };
   const mensajes = publicables(lista, ctx).sort((a, b) => b.fecha.localeCompare(a.fecha));
-  return { cursos, testingai, mensajes };
+  return { cursos, clasesPorCurso, mensajes, ctx };
 }
 
-export function nombreCurso(cursos, id) {
+export function nombreCurso(cursos, id, corto = false) {
   const c = cursos.find((x) => x.id === id);
-  return c ? c.nombre[estado.idioma] || c.nombre.es : id;
+  if (!c) return id;
+  const n = corto && c.nombre_corto ? c.nombre_corto : c.nombre;
+  return n[estado.idioma] || n.es;
 }
+
+export const etiquetaClase = (c) => (c.numero === 0 ? t('bienvenida') : `${t('clase')} ${c.numero}`);
 
 // Crea elementos sin innerHTML: todo el texto de los alumnos va por textContent.
 export function el(etiqueta, props = {}, ...hijos) {
@@ -101,16 +105,17 @@ export function el(etiqueta, props = {}, ...hijos) {
 }
 
 /** Tarjeta de un mensaje. */
-export function tarjetaMensaje(m, { cursos, clases }) {
-  const clase = m.clase_relacionada && clases ? clases.find((c) => c.id === m.clase_relacionada) : null;
-  const meta = [nombreCurso(cursos, m.curso)];
-  if (clase) meta.push(clase.numero === 0 ? t('bienvenida') : `${t('clase')} ${clase.numero}`);
+export function tarjetaMensaje(m, { cursos, clasesPorCurso }) {
+  const datosClases = clasesPorCurso && clasesPorCurso[m.curso];
+  const clase = m.clase_relacionada && datosClases ? datosClases.clases.find((c) => c.id === m.clase_relacionada) : null;
+  const meta = [nombreCurso(cursos, m.curso, true)];
+  if (clase) meta.push(etiquetaClase(clase));
   meta.push(formatearFecha(m.fecha, { day: 'numeric', month: 'short', year: 'numeric' }));
   return el('li', { class: `tarjeta${esEjemplo(m) ? ' tarjeta--ejemplo' : ''}` },
     el('blockquote', { class: 'tarjeta__mensaje' }, el('p', { text: m.mensaje })),
     el('p', { class: 'tarjeta__autor' },
       el('span', { class: 'tarjeta__nombre', text: m.nombre_visible }),
-      m.rol_o_pais ? el('span', { class: 'tarjeta__rol', text: ` · ${m.rol_o_pais}` }) : null,
+      m.rol_o_pais ? el('span', { class: 'tarjeta__rol', text: `· ${m.rol_o_pais}` }) : null,
       esEjemplo(m) ? el('span', { class: 'etiqueta-ejemplo', text: t('ejemplo') }) : null),
     el('p', { class: 'tarjeta__meta', text: meta.join(' · ') }));
 }

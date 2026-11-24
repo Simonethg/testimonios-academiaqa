@@ -1,35 +1,29 @@
-// Valida data/testimonios.json. Se corre en cada Pull Request (GitHub Actions)
-// y a mano con: npm run validar
-import { readFile } from 'node:fs/promises';
+// Valida cada archivo de data/testimonios/<curso>/. Se corre en cada Pull Request
+// (GitHub Actions) y a mano con: npm run validar
+// Con un argumento valida un archivo de lista, por ejemplo: node scripts/validar-testimonios.mjs data/ejemplos.json
+import { contexto, leerJSON, leerTestimonios } from './datos.mjs';
 import { validarLista } from '../assets/js/validar.js';
 
-const raiz = new URL('../', import.meta.url);
-const leer = async (ruta) => JSON.parse(await readFile(new URL(ruta, raiz), 'utf8'));
+const ctx = await contexto();
+const archivoLista = process.argv[2];
 
-async function main() {
-  const archivo = process.argv[2] || 'data/testimonios.json';
-  let lista;
-  try {
-    lista = await leer(archivo);
-  } catch (e) {
-    console.error(`✗ ${archivo} no es un JSON válido: ${e.message}`);
+if (archivoLista) {
+  const problemas = validarLista(await leerJSON(archivoLista), ctx);
+  if (problemas.length) {
+    console.error(`✗ ${archivoLista}: ${problemas.length} entrada(s) con problemas`);
+    for (const p of problemas) console.error(`  · posición ${p.indice}: ${p.errores.join('; ')}`);
     process.exit(1);
   }
-  const cursos = (await leer('data/cursos.json')).map((c) => c.id);
-  const testingai = await leer('data/clases-testingai.json');
-  const clases = { [testingai.curso]: testingai.clases.map((c) => c.id) };
-  const hoy = new Date().toISOString().slice(0, 10);
-
-  const problemas = validarLista(lista, { cursos, clases, hoy });
+  console.log(`✓ ${archivoLista}: todas las entradas son válidas`);
+} else {
+  const { entradas, problemas } = await leerTestimonios(ctx);
   if (problemas.length) {
-    console.error(`✗ ${archivo}: ${problemas.length} entrada(s) con problemas`);
+    console.error(`✗ ${problemas.length} archivo(s) con problemas:`);
     for (const p of problemas) {
-      console.error(`  · posición ${p.indice}${p.id ? ` (id ${p.id})` : ''}`);
+      console.error(`  · ${p.ruta}`);
       for (const e of p.errores) console.error(`      - ${e}`);
     }
     process.exit(1);
   }
-  console.log(`✓ ${archivo}: ${lista.length} entrada(s) válidas`);
+  console.log(`✓ data/testimonios/: ${entradas.length} mensaje(s) válidos`);
 }
-
-main();

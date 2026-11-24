@@ -5,99 +5,119 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="description" content="Mensajes de alumnos de TestingAI y de los cursos de AcademiaQA, clase por clase.">
-  <title>Lo que se llevan de TestingAI · AcademiaQA</title>
+  <meta name="description" content="Muro de gratitud: lo que se llevan quienes hicieron los cursos de AcademiaQA.">
+  <title>Muro de gratitud · AcademiaQA</title>
   <link rel="preload" href="assets/fonts/kanit-400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/estilos.css">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <script src="assets/js/tema-temprano.js"></script>
   <script type="module" src="assets/js/app.js"></script>
 </head>
-<body>
-  <a class="saltar" href="#contenido" data-i18n="skip">Saltar al contenido</a>
+<body class="muro">
+  <a class="saltar" href="#mensajes-zona" data-i18n="skip">Saltar al muro</a>
 
   <header class="cabecera">
     <div class="contenedor cabecera__fila">
-      <p class="marca"><span class="marca__punto" aria-hidden="true"></span><span data-i18n="brand">AcademiaQA · TestingAI</span></p>
-      <p class="handles">@SimonethG · @academia_qa</p>
+      <p class="marca"><span class="marca__punto" aria-hidden="true"></span><span data-i18n="brand">AcademiaQA</span></p>
+      <p class="handles handles--cabecera">@SimonethG · @academia_qa</p>
       <div class="controles">
         <div class="selector-idioma" role="group" data-i18n-aria="idioma" aria-label="Idioma">
           <button type="button" class="boton-chico" data-idioma="es" lang="es">ES</button>
           <button type="button" class="boton-chico" data-idioma="en" lang="en">EN</button>
         </div>
-        <button type="button" class="boton-chico" id="boton-tema" aria-pressed="false"><span aria-hidden="true" class="icono-tema"></span><span id="texto-tema" data-i18n="tema_oscuro">Modo oscuro</span></button>
+        <button type="button" class="boton-chico" id="boton-tema" aria-pressed="false"><span aria-hidden="true" class="icono-tema"></span><span class="texto-tema" data-i18n="tema_oscuro">Modo oscuro</span></button>
       </div>
     </div>
   </header>
 
-  <main id="contenido" tabindex="-1">
-    <section class="portada contenedor" aria-labelledby="titulo">
-      <p id="aviso-demo" class="aviso-demo" hidden data-i18n="demo_aviso"></p>
-      <h1 id="titulo" data-i18n="titulo">Lo que se llevan de TestingAI</h1>
-      <p class="bajada" data-i18n="bajada"></p>
-      <a class="boton" href="#como" data-i18n="cta_dejar">Dejar mi mensaje</a>
-
-      <ul class="contadores" aria-live="polite">
-        <li><strong id="n-personas">0</strong> <span id="t-personas" data-i18n="contador_personas"></span></li>
-        <li><strong id="n-clases">0</strong> <span data-i18n="contador_clases"></span></li>
-        <li><strong id="n-semanas">0</strong> <span id="t-semanas" data-i18n="contador_semanas"></span></li>
-      </ul>
+  <main id="contenido" class="contenedor principal">
+    <section class="portada" aria-labelledby="titulo">
+      <div class="portada__texto">
+        <h1 id="titulo" data-i18n="titulo">Muro de gratitud</h1>
+        <p class="bajada" data-i18n="bajada"></p>
+      </div>
+      <div class="portada__controles">
+        <div class="cursos" role="group" aria-labelledby="etiqueta-cursos">
+          <span id="etiqueta-cursos" class="cursos__etiqueta" data-i18n="cursos">Cursos</span>
+          <div id="botones-cursos" class="cursos__botones"></div>
+        </div>
+        <ul id="contadores" class="contadores" aria-live="polite"></ul>
+      </div>
     </section>
 
-    <section class="contenedor bloque" aria-labelledby="titulo-linea" id="seccion-linea">
-      <div class="bloque__cabecera">
-        <h2 id="titulo-linea" data-i18n="linea_titulo">Clase por clase</h2>
-        <p class="ayuda" data-i18n="linea_ayuda"></p>
-      </div>
+    <p id="aviso-demo" class="aviso-demo" hidden data-i18n="demo_aviso"></p>
+
+    <section id="seccion-linea" class="linea-zona" aria-labelledby="titulo-linea" hidden>
+      <h2 id="titulo-linea" class="visualmente-oculto" data-i18n="linea_titulo">Clase por clase</h2>
       <ol id="linea" class="linea"></ol>
-      <div class="leyenda">
-        <h3 class="leyenda__titulo" data-i18n="leyenda">Referencias</h3>
-        <ul class="leyenda__lista">
-          <li><span class="punto punto--dada" aria-hidden="true"></span><span data-i18n="leyenda_dada"></span></li>
-          <li><span class="punto punto--mensajes" aria-hidden="true"><span class="punto__n">2</span></span><span data-i18n="leyenda_mensajes"></span></li>
-          <li><span class="punto punto--proxima" aria-hidden="true"></span><span data-i18n="leyenda_proxima"></span></li>
+      <div class="linea-zona__pie">
+        <p id="detalle" class="detalle"></p>
+        <ul class="leyenda" aria-hidden="true">
+          <li><span class="punto punto--dada"></span><span data-i18n="leyenda_dada"></span></li>
+          <li><span class="punto punto--mensajes"></span><span data-i18n="leyenda_mensajes"></span></li>
+          <li><span class="punto punto--proxima"></span><span data-i18n="leyenda_proxima"></span></li>
         </ul>
       </div>
-      <div id="detalle" class="detalle" aria-live="polite" hidden></div>
     </section>
 
-    <section class="contenedor bloque" aria-labelledby="titulo-mensajes">
-      <div class="bloque__cabecera bloque__cabecera--fila">
-        <h2 id="titulo-mensajes" tabindex="-1" data-i18n="mensajes_titulo">Mensajes</h2>
-        <div class="filtro">
-          <label for="filtro-curso" data-i18n="filtro_curso">Curso</label>
-          <select id="filtro-curso"></select>
+    <section id="mensajes-zona" class="mensajes-zona" aria-labelledby="titulo-mensajes" tabindex="-1">
+      <div class="mensajes-zona__cabecera">
+        <h2 id="titulo-mensajes" tabindex="-1"><span data-i18n="mensajes_titulo">Mensajes</span><span id="subtitulo-mensajes" class="subtitulo"></span></h2>
+        <button type="button" class="boton-chico" id="quitar-filtro-clase" hidden data-i18n="ver_todos">Ver todos</button>
+      </div>
+      <div id="muro" class="muro-grilla">
+        <ul id="mensajes" class="tarjetas"></ul>
+        <div id="vacio" class="vacio" hidden>
+          <p class="vacio__titulo" data-i18n="vacio_titulo"></p>
+          <p data-i18n="vacio_texto"></p>
+          <button type="button" class="boton" data-abrir="dialogo-como" data-i18n="cta_dejar">Dejar mi mensaje</button>
         </div>
       </div>
-      <p id="filtro-clase" class="filtro-clase" hidden>
-        <span id="filtro-clase-texto"></span>
-        <button type="button" class="boton-chico" id="quitar-filtro-clase" data-i18n="ver_todos">Ver todos los mensajes</button>
-      </p>
-      <ul id="mensajes" class="tarjetas"></ul>
-      <div id="vacio" class="vacio" hidden>
-        <p class="vacio__titulo" data-i18n="vacio_titulo"></p>
-        <p data-i18n="vacio_texto"></p>
-        <a class="boton" href="#como" data-i18n="cta_dejar">Dejar mi mensaje</a>
-      </div>
+      <nav id="paginacion" class="paginacion" data-i18n-aria="paginacion" aria-label="Paginación del muro" hidden>
+        <button type="button" class="boton-chico" id="pagina-anterior"><span aria-hidden="true">←</span> <span data-i18n="anterior">Anterior</span></button>
+        <p id="pagina-texto" class="paginacion__texto" aria-live="polite"></p>
+        <button type="button" class="boton-chico" id="pagina-siguiente"><span data-i18n="siguiente">Siguiente</span> <span aria-hidden="true">→</span></button>
+      </nav>
     </section>
+  </main>
 
-    <section class="contenedor bloque" id="como" aria-labelledby="titulo-como" tabindex="-1">
+  <footer class="pie">
+    <div class="contenedor pie__fila">
+      <button type="button" class="boton" data-abrir="dialogo-como" data-i18n="cta_dejar">Dejar mi mensaje</button>
+      <p class="pie__privacidad"><span data-i18n="privacidad_corta"></span> <button type="button" class="enlace" data-abrir="dialogo-privacidad" data-i18n="privacidad_titulo">Privacidad</button></p>
+      <a class="pie__qr" href="https://www.simonethg.com">
+        <img src="assets/img/qr-simonethg.svg" width="48" height="48" alt="Código QR que lleva a www.simonethg.com" data-i18n-alt="pie_qr_alt">
+        <span><span class="handles">@SimonethG · @academia_qa</span><span class="pie__sitio" data-i18n="pie_qr">www.simonethg.com</span></span>
+      </a>
+    </div>
+  </footer>
+
+  <dialog id="dialogo-como" class="dialogo" aria-labelledby="titulo-como">
+    <div class="dialogo__cabecera">
       <h2 id="titulo-como" data-i18n="como_titulo">¿Cómo dejo mi mensaje?</h2>
-      <p data-i18n="como_intro"></p>
-      <ol class="pasos">
-        <li data-i18n="paso_1"></li>
-        <li data-i18n="paso_2"></li>
-        <li data-i18n="paso_3"></li>
-      </ol>
-      <p class="enlaces-pr">
-        <a id="enlace-guia" class="boton boton--secundario" href="CONTRIBUTING.md" data-i18n="ver_guia">Ver la guía paso a paso</a>
-        <a id="enlace-archivo" class="boton boton--secundario" href="data/testimonios.json" data-i18n="abrir_archivo">Abrir data/testimonios.json en GitHub</a>
-      </p>
-
-      <form id="formulario" class="formulario" novalidate aria-labelledby="titulo-form">
-        <h3 id="titulo-form" data-i18n="form_titulo">Armá tu entrada</h3>
-        <p class="ayuda" data-i18n="form_ayuda"></p>
-        <div id="form-errores" class="form-errores" role="alert" tabindex="-1" hidden></div>
+      <button type="button" class="boton-chico" data-cerrar data-i18n="cerrar">Cerrar</button>
+    </div>
+    <p data-i18n="como_intro"></p>
+    <ol class="pasos">
+      <li data-i18n="paso_1"></li>
+      <li data-i18n="paso_2"></li>
+      <li data-i18n="paso_3"></li>
+    </ol>
+    <form id="formulario" class="formulario" novalidate aria-labelledby="titulo-form">
+      <h3 id="titulo-form" data-i18n="form_titulo">Armá tu archivo</h3>
+      <p class="ayuda" data-i18n="form_ayuda"></p>
+      <div id="form-errores" class="form-errores" role="alert" tabindex="-1" hidden></div>
+      <div class="campo-doble">
+        <div class="campo">
+          <label for="f-curso" data-i18n="form_curso"></label>
+          <select id="f-curso" name="curso" required></select>
+        </div>
+        <div class="campo" id="campo-clase" hidden>
+          <label for="f-clase" data-i18n="form_clase"></label>
+          <select id="f-clase" name="clase"></select>
+        </div>
+      </div>
+      <div class="campo-doble">
         <div class="campo">
           <label for="f-nombre" data-i18n="form_nombre"></label>
           <input id="f-nombre" name="nombre" type="text" maxlength="40" autocomplete="nickname" required>
@@ -106,53 +126,39 @@
           <label for="f-rol" data-i18n="form_rol"></label>
           <input id="f-rol" name="rol" type="text" maxlength="40" autocomplete="off">
         </div>
-        <div class="campo-doble">
-          <div class="campo">
-            <label for="f-curso" data-i18n="form_curso"></label>
-            <select id="f-curso" name="curso" required></select>
-          </div>
-          <div class="campo">
-            <label for="f-clase" data-i18n="form_clase"></label>
-            <select id="f-clase" name="clase"></select>
-          </div>
-        </div>
-        <div class="campo">
-          <label for="f-mensaje" data-i18n="form_mensaje"></label>
-          <textarea id="f-mensaje" name="mensaje" rows="4" maxlength="280" required aria-describedby="f-contador"></textarea>
-          <p id="f-contador" class="contador-caracteres"><span id="f-restantes">280</span> <span data-i18n="form_restantes"></span></p>
-        </div>
-        <div class="campo campo--check">
-          <input id="f-consentimiento" name="consentimiento" type="checkbox" required>
-          <label for="f-consentimiento" data-i18n="form_consentimiento"></label>
-        </div>
-        <button type="submit" class="boton" data-i18n="form_generar">Armar mi entrada</button>
-
-        <div id="resultado" class="resultado" hidden>
-          <label for="f-salida" data-i18n="form_resultado"></label>
-          <textarea id="f-salida" rows="11" readonly spellcheck="false"></textarea>
-          <button type="button" class="boton boton--secundario" id="boton-copiar" data-i18n="form_copiar">Copiar</button>
-          <p id="estado-copia" class="ayuda" aria-live="polite"></p>
-        </div>
-      </form>
-    </section>
-
-    <section class="contenedor bloque privacidad" id="privacidad" aria-labelledby="titulo-privacidad">
-      <h2 id="titulo-privacidad" data-i18n="privacidad_titulo">Privacidad</h2>
-      <p data-i18n="privacidad_texto"></p>
-    </section>
-  </main>
-
-  <footer class="pie">
-    <div class="contenedor pie__fila">
-      <a class="pie__qr" href="https://www.simonethg.com">
-        <img src="assets/img/qr-simonethg.svg" width="96" height="96" alt="Código QR que lleva a www.simonethg.com" data-i18n-alt="pie_qr_alt">
-        <span data-i18n="pie_qr">Más cursos en www.simonethg.com</span>
-      </a>
-      <div>
-        <p class="handles handles--pie">@SimonethG · @academia_qa</p>
-        <p data-i18n="pie_hecho"></p>
       </div>
+      <div class="campo">
+        <label for="f-mensaje" data-i18n="form_mensaje"></label>
+        <textarea id="f-mensaje" name="mensaje" rows="3" maxlength="280" required aria-describedby="f-contador"></textarea>
+        <p id="f-contador" class="contador-caracteres"><span id="f-restantes">280</span> <span data-i18n="form_restantes"></span></p>
+      </div>
+      <div class="campo campo--check">
+        <input id="f-consentimiento" name="consentimiento" type="checkbox" required>
+        <label for="f-consentimiento" data-i18n="form_consentimiento"></label>
+      </div>
+      <button type="submit" class="boton" data-i18n="form_generar">Armar mi archivo</button>
+
+      <div id="resultado" class="resultado" hidden>
+        <label for="f-archivo" data-i18n="form_archivo"></label>
+        <input id="f-archivo" type="text" readonly spellcheck="false">
+        <label for="f-salida" data-i18n="form_resultado"></label>
+        <textarea id="f-salida" rows="9" readonly spellcheck="false"></textarea>
+        <div class="resultado__acciones">
+          <button type="button" class="boton boton--secundario" id="boton-copiar" data-i18n="form_copiar">Copiar</button>
+          <a id="enlace-crear" class="boton" href="#" target="_blank" rel="noopener" data-i18n="crear_archivo">Crear mi archivo en GitHub</a>
+        </div>
+        <p id="estado-copia" class="ayuda" aria-live="polite"></p>
+      </div>
+    </form>
+    <p class="dialogo__pie"><a id="enlace-guia" href="CONTRIBUTING.md" target="_blank" rel="noopener" data-i18n="ver_guia">Guía paso a paso</a></p>
+  </dialog>
+
+  <dialog id="dialogo-privacidad" class="dialogo dialogo--chico" aria-labelledby="titulo-privacidad">
+    <div class="dialogo__cabecera">
+      <h2 id="titulo-privacidad" data-i18n="privacidad_titulo">Privacidad</h2>
+      <button type="button" class="boton-chico" data-cerrar data-i18n="cerrar">Cerrar</button>
     </div>
-  </footer>
+    <p data-i18n="privacidad_texto"></p>
+  </dialog>
 </body>
 </html>

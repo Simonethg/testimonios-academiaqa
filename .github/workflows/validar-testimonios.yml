@@ -23,21 +23,29 @@ jobs:
         with:
           node-version: 22
 
-      - name: Un PR de testimonio solo toca data/testimonios.json
+      - name: Un PR de testimonio solo agrega archivos en data/testimonios/
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository
         env:
           BASE_REF: ${{ github.base_ref }}
         run: |
-          cambiados=$(git diff --name-only "origin/${BASE_REF}...HEAD")
-          echo "Archivos cambiados:"; echo "$cambiados"
-          otros=$(echo "$cambiados" | grep -v '^data/testimonios.json$' || true)
-          if [ -n "$otros" ]; then
-            echo "::error::Este PR cambia archivos además de data/testimonios.json. Para sumar tu mensaje, cambiá solo ese archivo."
+          cambios=$(git diff --name-status --no-renames "origin/${BASE_REF}...HEAD")
+          echo "Cambios del PR:"; echo "$cambios"
+          if [ -z "$cambios" ]; then echo "::error::El PR no tiene cambios."; exit 1; fi
+          fuera=$(echo "$cambios" | grep -vE '^A[[:space:]]+data/testimonios/[a-z0-9-]+/[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]+\.json$' || true)
+          if [ -n "$fuera" ]; then
+            echo "::error::Este PR modifica, borra o agrega archivos fuera de data/testimonios/<curso>/. Para sumar tu mensaje, solo agregá tu archivo nuevo."
+            echo "$fuera"
             exit 1
           fi
 
       - name: Tests de las reglas
         run: npm test
 
-      - name: Validar data/testimonios.json
+      - name: Validar cada mensaje
         run: npm run validar
+
+      - name: Validar los ejemplos
+        run: node scripts/validar-testimonios.mjs data/ejemplos.json
+
+      - name: Generar el índice público (prueba)
+        run: npm run generar

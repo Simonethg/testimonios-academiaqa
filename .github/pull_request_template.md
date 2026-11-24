@@ -1,16 +1,14 @@
 ## Mi mensaje
 
-<!-- Pegá abajo tu entrada tal como la agregaste en data/testimonios.json. -->
+<!-- Escribí el nombre de tu archivo, por ejemplo data/testimonios/testingai-vivo/2026-12-02-ana.json -->
 
-```json
-
-```
+Archivo:
 
 ## Antes de enviar
 
-- [ ] Cambié solo el archivo `data/testimonios.json`.
+- [ ] Agregué solo mi archivo nuevo, dentro de `data/testimonios/<mi-curso>/`.
 - [ ] Mi mensaje tiene 280 caracteres o menos y no incluye email, teléfono ni links.
-- [ ] Puse `"consentimiento_publicar": true` y **acepto que mi nombre visible y mi mensaje se publiquen** en esta página y en los sitios de AcademiaQA y de Simoneth Gomez.
+- [ ] Puse `"consentimiento_publicar": true` y **acepto que mi nombre visible y mi mensaje se publiquen** en el muro de gratitud y en los sitios de AcademiaQA y de Simoneth Gomez.
 - [ ] Entiendo que mi usuario de GitHub queda visible en este Pull Request.
 
-<!-- Simoneth revisa cada Pull Request. Cuando lo aprueba y lo une, tu mensaje aparece en la página. -->
+<!-- Simoneth revisa cada Pull Request. Cuando lo une, tu mensaje aparece en el muro. -->

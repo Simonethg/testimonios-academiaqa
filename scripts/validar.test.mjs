@@ -37,3 +37,15 @@ test('rechaza campos extra, curso desconocido, clase inexistente y fecha futura'
 });
 test('ids repetidos se marcan', () => assert.equal(validarLista([base(), base()], ctx).length, 1));
 test('archivo que no es lista', () => assert.equal(validarLista({}, ctx).length, 1));
+
+import { validarRuta } from '../assets/js/validar.js';
+const ruta = 'data/testimonios/testingai-vivo/2026-11-23-ana.json';
+const conRuta = () => ({ ...base(), id: '2026-11-23-ana' });
+test('ruta correcta pasa', () => assert.deepEqual(validarRuta(ruta, conRuta()), []));
+test('carpeta distinta del curso falla', () => assert.ok(validarRuta('data/testimonios/carrera-qa-ia/2026-11-23-ana.json', conRuta()).length));
+test('id distinto del nombre de archivo falla', () => assert.ok(validarRuta(ruta, base()).length));
+test('fecha del nombre distinta del campo falla', () => assert.ok(validarRuta('data/testimonios/testingai-vivo/2026-11-22-ana.json', { ...conRuta(), id: '2026-11-22-ana' }).length));
+test('ruta fuera de data/testimonios falla', () => {
+  assert.ok(validarRuta('data/otro/2026-11-23-ana.json', conRuta()).length);
+  assert.ok(validarRuta('data/testimonios/testingai-vivo/../../index.html', conRuta()).length);
+});

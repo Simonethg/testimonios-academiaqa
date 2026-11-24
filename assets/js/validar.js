@@ -102,3 +102,22 @@ export function publicables(lista, ctx = {}) {
   if (!Array.isArray(lista)) return [];
   return lista.filter((t) => validarTestimonio(t, ctx).length === 0);
 }
+
+/**
+ * Reglas del archivo individual: data/testimonios/<curso>/<fecha>-<slug>.json
+ * El id tiene que ser el nombre del archivo sin .json, la carpeta tiene que ser
+ * el curso y el nombre tiene que empezar con la fecha.
+ */
+export function validarRuta(ruta, t) {
+  const errores = [];
+  const m = /^data\/testimonios\/([a-z0-9-]+)\/(\d{4}-\d{2}-\d{2})-([a-z0-9]+(?:-[a-z0-9]+)*)\.json$/.exec(ruta);
+  if (!m) return [`${ruta}: la ruta tiene que ser data/testimonios/<curso>/<AAAA-MM-DD>-<tu-nombre>.json`];
+  const [, carpeta, fecha] = m;
+  const nombre = ruta.split('/').pop().replace(/\.json$/, '');
+  if (t && typeof t === 'object') {
+    if (t.curso !== carpeta) errores.push(`${ruta}: la carpeta (${carpeta}) no coincide con el curso (${t.curso})`);
+    if (t.fecha !== fecha) errores.push(`${ruta}: la fecha del nombre (${fecha}) no coincide con el campo fecha (${t.fecha})`);
+    if (t.id !== nombre) errores.push(`${ruta}: el id tiene que ser «${nombre}»`);
+  }
+  return errores;
+}
