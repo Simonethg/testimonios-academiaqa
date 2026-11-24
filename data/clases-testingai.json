@@ -1,0 +1,18 @@
+{
+  "curso": "testingai-vivo",
+  "cohorte": "2026-10",
+  "clases": [
+    { "id": "bienvenida", "numero": 0, "fecha": "2026-10-19", "estado": "dada", "tema": { "es": "Bienvenida al curso", "en": "Course welcome" } },
+    { "id": "clase-01", "numero": 1, "fecha": "2026-10-26", "estado": "dada", "tema": { "es": "Conociendo a mi agente de IA", "en": "Getting to know my AI agent" } },
+    { "id": "clase-02", "numero": 2, "fecha": "2026-10-28", "estado": "dada", "tema": { "es": "MCP y optimización de tareas QA", "en": "MCP and QA task optimization" } },
+    { "id": "clase-03", "numero": 3, "fecha": "2026-11-04", "estado": "dada", "tema": { "es": "Hackear una IA sin escribir código: seguridad de agentes", "en": "Hacking an AI without code: agent security" } },
+    { "id": "clase-04", "numero": 4, "fecha": "2026-11-06", "estado": "dada", "tema": { "es": "Prompt engineering para testing", "en": "Prompt engineering for testing" } },
+    { "id": "clase-05", "numero": 5, "fecha": "2026-11-11", "estado": "dada", "tema": { "es": "Gestión en Qase + Jira", "en": "Test management in Qase + Jira" } },
+    { "id": "clase-06", "numero": 6, "fecha": "2026-11-16", "estado": "dada", "tema": { "es": "Testing de APIs y performance con IA", "en": "API and performance testing with AI" } },
+    { "id": "clase-07", "numero": 7, "fecha": "2026-11-18", "estado": "dada", "tema": { "es": "Accesibilidad y testing visual y responsive con IA", "en": "Accessibility, visual and responsive testing with AI" } },
+    { "id": "clase-08", "numero": 8, "fecha": "2026-11-23", "estado": "dada", "tema": { "es": "SQL para QA: consultar una base de datos y reportar bugs", "en": "SQL for QA: querying a database and reporting bugs" } },
+    { "id": "clase-09", "numero": 9, "fecha": "2026-11-25", "estado": "proxima", "tema": null },
+    { "id": "clase-10", "numero": 10, "fecha": "2026-11-30", "estado": "proxima", "tema": null },
+    { "id": "cierre", "numero": 11, "fecha": "2026-12-02", "estado": "proxima", "tema": { "es": "Cierre del ciclo", "en": "Closing session" } }
+  ]
+}

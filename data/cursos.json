@@ -1,0 +1,5 @@
+[
+  { "id": "testingai-vivo", "nombre": { "es": "TestingAI en vivo", "en": "TestingAI live" }, "url": "https://academiaqa.com" },
+  { "id": "carrera-qa-ia", "nombre": { "es": "Carrera QA con IA", "en": "QA Career with AI" }, "url": "https://academiaqa.com" },
+  { "id": "otro-academiaqa", "nombre": { "es": "Otro curso de AcademiaQA", "en": "Other AcademiaQA course" }, "url": "https://academiaqa.com" }
+]

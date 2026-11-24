@@ -1,0 +1,33 @@
+[
+  {
+    "id": "ejemplo-1",
+    "curso": "testingai-vivo",
+    "cohorte": "2026-10",
+    "fecha": "2026-11-23",
+    "clase_relacionada": "clase-08",
+    "nombre_visible": "Ejemplo",
+    "rol_o_pais": "Texto de muestra",
+    "mensaje": "Así se ve un mensaje en la grilla. Este texto es de muestra y solo aparece con ?demo=1.",
+    "consentimiento_publicar": true
+  },
+  {
+    "id": "ejemplo-2",
+    "curso": "testingai-vivo",
+    "cohorte": "2026-10",
+    "fecha": "2026-11-18",
+    "clase_relacionada": "clase-07",
+    "nombre_visible": "Ejemplo",
+    "rol_o_pais": "Texto de muestra",
+    "mensaje": "Un segundo mensaje de muestra, unido a otra clase, para ver cómo se encienden los puntos.",
+    "consentimiento_publicar": true
+  },
+  {
+    "id": "ejemplo-3",
+    "curso": "carrera-qa-ia",
+    "cohorte": "async",
+    "fecha": "2026-11-20",
+    "nombre_visible": "Ejemplo",
+    "mensaje": "Mensaje de muestra de otro curso, para probar el filtro por curso.",
+    "consentimiento_publicar": true
+  }
+]

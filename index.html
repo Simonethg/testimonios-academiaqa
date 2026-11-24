@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="description" content="Mensajes de alumnos de TestingAI y de los cursos de AcademiaQA, clase por clase.">
+  <title>Lo que se llevan de TestingAI · AcademiaQA</title>
+  <link rel="preload" href="assets/fonts/kanit-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/estilos.css">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <script src="assets/js/tema-temprano.js"></script>
+  <script type="module" src="assets/js/app.js"></script>
+</head>
+<body>
+  <a class="saltar" href="#contenido" data-i18n="skip">Saltar al contenido</a>
+
+  <header class="cabecera">
+    <div class="contenedor cabecera__fila">
+      <p class="marca"><span class="marca__punto" aria-hidden="true"></span><span data-i18n="brand">AcademiaQA · TestingAI</span></p>
+      <p class="handles">@SimonethG · @academia_qa</p>
+      <div class="controles">
+        <div class="selector-idioma" role="group" data-i18n-aria="idioma" aria-label="Idioma">
+          <button type="button" class="boton-chico" data-idioma="es" lang="es">ES</button>
+          <button type="button" class="boton-chico" data-idioma="en" lang="en">EN</button>
+        </div>
+        <button type="button" class="boton-chico" id="boton-tema" aria-pressed="false"><span aria-hidden="true" class="icono-tema"></span><span id="texto-tema" data-i18n="tema_oscuro">Modo oscuro</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenido" tabindex="-1">
+    <section class="portada contenedor" aria-labelledby="titulo">
+      <p id="aviso-demo" class="aviso-demo" hidden data-i18n="demo_aviso"></p>
+      <h1 id="titulo" data-i18n="titulo">Lo que se llevan de TestingAI</h1>
+      <p class="bajada" data-i18n="bajada"></p>
+      <a class="boton" href="#como" data-i18n="cta_dejar">Dejar mi mensaje</a>
+
+      <ul class="contadores" aria-live="polite">
+        <li><strong id="n-personas">0</strong> <span id="t-personas" data-i18n="contador_personas"></span></li>
+        <li><strong id="n-clases">0</strong> <span data-i18n="contador_clases"></span></li>
+        <li><strong id="n-semanas">0</strong> <span id="t-semanas" data-i18n="contador_semanas"></span></li>
+      </ul>
+    </section>
+
+    <section class="contenedor bloque" aria-labelledby="titulo-linea" id="seccion-linea">
+      <div class="bloque__cabecera">
+        <h2 id="titulo-linea" data-i18n="linea_titulo">Clase por clase</h2>
+        <p class="ayuda" data-i18n="linea_ayuda"></p>
+      </div>
+      <ol id="linea" class="linea"></ol>
+      <div class="leyenda">
+        <h3 class="leyenda__titulo" data-i18n="leyenda">Referencias</h3>
+        <ul class="leyenda__lista">
+          <li><span class="punto punto--dada" aria-hidden="true"></span><span data-i18n="leyenda_dada"></span></li>
+          <li><span class="punto punto--mensajes" aria-hidden="true"><span class="punto__n">2</span></span><span data-i18n="leyenda_mensajes"></span></li>
+          <li><span class="punto punto--proxima" aria-hidden="true"></span><span data-i18n="leyenda_proxima"></span></li>
+        </ul>
+      </div>
+      <div id="detalle" class="detalle" aria-live="polite" hidden></div>
+    </section>
+
+    <section class="contenedor bloque" aria-labelledby="titulo-mensajes">
+      <div class="bloque__cabecera bloque__cabecera--fila">
+        <h2 id="titulo-mensajes" tabindex="-1" data-i18n="mensajes_titulo">Mensajes</h2>
+        <div class="filtro">
+          <label for="filtro-curso" data-i18n="filtro_curso">Curso</label>
+          <select id="filtro-curso"></select>
+        </div>
+      </div>
+      <p id="filtro-clase" class="filtro-clase" hidden>
+        <span id="filtro-clase-texto"></span>
+        <button type="button" class="boton-chico" id="quitar-filtro-clase" data-i18n="ver_todos">Ver todos los mensajes</button>
+      </p>
+      <ul id="mensajes" class="tarjetas"></ul>
+      <div id="vacio" class="vacio" hidden>
+        <p class="vacio__titulo" data-i18n="vacio_titulo"></p>
+        <p data-i18n="vacio_texto"></p>
+        <a class="boton" href="#como" data-i18n="cta_dejar">Dejar mi mensaje</a>
+      </div>
+    </section>
+
+    <section class="contenedor bloque" id="como" aria-labelledby="titulo-como" tabindex="-1">
+      <h2 id="titulo-como" data-i18n="como_titulo">¿Cómo dejo mi mensaje?</h2>
+      <p data-i18n="como_intro"></p>
+      <ol class="pasos">
+        <li data-i18n="paso_1"></li>
+        <li data-i18n="paso_2"></li>
+        <li data-i18n="paso_3"></li>
+      </ol>
+      <p class="enlaces-pr">
+        <a id="enlace-guia" class="boton boton--secundario" href="CONTRIBUTING.md" data-i18n="ver_guia">Ver la guía paso a paso</a>
+        <a id="enlace-archivo" class="boton boton--secundario" href="data/testimonios.json" data-i18n="abrir_archivo">Abrir data/testimonios.json en GitHub</a>
+      </p>
+
+      <form id="formulario" class="formulario" novalidate aria-labelledby="titulo-form">
+        <h3 id="titulo-form" data-i18n="form_titulo">Armá tu entrada</h3>
+        <p class="ayuda" data-i18n="form_ayuda"></p>
+        <div id="form-errores" class="form-errores" role="alert" tabindex="-1" hidden></div>
+        <div class="campo">
+          <label for="f-nombre" data-i18n="form_nombre"></label>
+          <input id="f-nombre" name="nombre" type="text" maxlength="40" autocomplete="nickname" required>
+        </div>
+        <div class="campo">
+          <label for="f-rol" data-i18n="form_rol"></label>
+          <input id="f-rol" name="rol" type="text" maxlength="40" autocomplete="off">
+        </div>
+        <div class="campo-doble">
+          <div class="campo">
+            <label for="f-curso" data-i18n="form_curso"></label>
+            <select id="f-curso" name="curso" required></select>
+          </div>
+          <div class="campo">
+            <label for="f-clase" data-i18n="form_clase"></label>
+            <select id="f-clase" name="clase"></select>
+          </div>
+        </div>
+        <div class="campo">
+          <label for="f-mensaje" data-i18n="form_mensaje"></label>
+          <textarea id="f-mensaje" name="mensaje" rows="4" maxlength="280" required aria-describedby="f-contador"></textarea>
+          <p id="f-contador" class="contador-caracteres"><span id="f-restantes">280</span> <span data-i18n="form_restantes"></span></p>
+        </div>
+        <div class="campo campo--check">
+          <input id="f-consentimiento" name="consentimiento" type="checkbox" required>
+          <label for="f-consentimiento" data-i18n="form_consentimiento"></label>
+        </div>
+        <button type="submit" class="boton" data-i18n="form_generar">Armar mi entrada</button>
+
+        <div id="resultado" class="resultado" hidden>
+          <label for="f-salida" data-i18n="form_resultado"></label>
+          <textarea id="f-salida" rows="11" readonly spellcheck="false"></textarea>
+          <button type="button" class="boton boton--secundario" id="boton-copiar" data-i18n="form_copiar">Copiar</button>
+          <p id="estado-copia" class="ayuda" aria-live="polite"></p>
+        </div>
+      </form>
+    </section>
+
+    <section class="contenedor bloque privacidad" id="privacidad" aria-labelledby="titulo-privacidad">
+      <h2 id="titulo-privacidad" data-i18n="privacidad_titulo">Privacidad</h2>
+      <p data-i18n="privacidad_texto"></p>
+    </section>
+  </main>
+
+  <footer class="pie">
+    <div class="contenedor pie__fila">
+      <a class="pie__qr" href="https://www.simonethg.com">
+        <img src="assets/img/qr-simonethg.svg" width="96" height="96" alt="Código QR que lleva a www.simonethg.com" data-i18n-alt="pie_qr_alt">
+        <span data-i18n="pie_qr">Más cursos en www.simonethg.com</span>
+      </a>
+      <div>
+        <p class="handles handles--pie">@SimonethG · @academia_qa</p>
+        <p data-i18n="pie_hecho"></p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "testimonios-academiaqa",
+  "private": true,
+  "type": "module",
+  "description": "Mensajes de alumnos de los cursos de AcademiaQA, moderados por Pull Request.",
+  "scripts": {
+    "validar": "node scripts/validar-testimonios.mjs",
+    "test": "node --test scripts/validar.test.mjs"
+  }
+}

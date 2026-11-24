@@ -1,0 +1,14 @@
+node_modules/
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.mp4
+*.mov
+*.wav
+*.mp3
+*.zip

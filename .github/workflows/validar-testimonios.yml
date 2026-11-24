@@ -1,0 +1,43 @@
+name: Validar testimonios
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Traer el repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Usar Node 22
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version: 22
+
+      - name: Un PR de testimonio solo toca data/testimonios.json
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          cambiados=$(git diff --name-only "origin/${BASE_REF}...HEAD")
+          echo "Archivos cambiados:"; echo "$cambiados"
+          otros=$(echo "$cambiados" | grep -v '^data/testimonios.json$' || true)
+          if [ -n "$otros" ]; then
+            echo "::error::Este PR cambia archivos además de data/testimonios.json. Para sumar tu mensaje, cambiá solo ese archivo."
+            exit 1
+          fi
+
+      - name: Tests de las reglas
+        run: npm test
+
+      - name: Validar data/testimonios.json
+        run: npm run validar
