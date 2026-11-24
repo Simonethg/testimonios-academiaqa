@@ -1,30 +1,17 @@
 import {
   estado, t, iniciarIdioma, cargarIdioma, temaActual, aplicarTema,
-  cargarDatos, formatearFecha, nombreCurso, etiquetaClase, el, tarjetaMensaje, esDemo,
+  cargarDatos, nombreCurso, etiquetaClase, el, tarjetaMensaje,
 } from './comun.js';
 import { validarTestimonio } from './validar.js';
 import { crearArchivoURL, GUIA_URL } from './config.js';
 
 const $ = (id) => document.getElementById(id);
 let datos = null;
-const vista = { curso: 'todos', clase: null, inicio: 0, historial: [] };
-
-function lunesDe(iso) {
-  const d = new Date(`${iso}T12:00:00Z`);
-  d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7));
-  return d.toISOString().slice(0, 10);
-}
+const vista = { curso: 'todos', inicio: 0, fin: 0, historial: [] };
 
 const temaClase = (c) => (c.tema ? c.tema[estado.idioma] || c.tema.es : t('proximamente'));
-const contarTexto = (n) => `${n} ${n === 1 ? t('mensajes_uno') : t('mensajes_varios')}`;
 const clasesDe = (curso) => (datos.clasesPorCurso[curso] ? datos.clasesPorCurso[curso].clases : null);
-
-function delCurso() {
-  return datos.mensajes.filter((m) => vista.curso === 'todos' || m.curso === vista.curso);
-}
-function filtrados() {
-  return delCurso().filter((m) => !vista.clase || m.clase_relacionada === vista.clase);
-}
+const delCurso = () => datos.mensajes.filter((m) => vista.curso === 'todos' || m.curso === vista.curso);
 
 /* ---------- Selector de curso ---------- */
 function pintarCursos() {
@@ -32,7 +19,7 @@ function pintarCursos() {
     ...datos.cursos.map((c) => ({ id: c.id, texto: nombreCurso(datos.cursos, c.id, true) }))];
   $('botones-cursos').replaceChildren(...opciones.map((o) => el('button', {
     type: 'button',
-    class: 'boton-chico boton-curso',
+    class: 'boton-curso',
     'aria-pressed': String(vista.curso === o.id),
     onclick: () => elegirCurso(o.id),
     text: o.texto,
@@ -41,140 +28,49 @@ function pintarCursos() {
 
 function elegirCurso(id) {
   vista.curso = id;
-  vista.clase = null;
   reiniciarPaginas();
-  pintarTodo();
+  pintarCursos();
+  pintarMuro();
   const url = new URL(window.location.href);
   if (id === 'todos') url.searchParams.delete('curso'); else url.searchParams.set('curso', id);
   window.history.replaceState(null, '', url);
 }
 
-/* ---------- Contadores ---------- */
-function chip(n, claveUno, claveVarios) {
-  return el('li', {}, el('strong', { text: String(n) }), el('span', { text: t(n === 1 ? claveUno : claveVarios) }));
-}
-function pintarContadores() {
-  const lista = delCurso();
-  const personas = new Set(lista.map((m) => m.nombre_visible.trim().toLowerCase())).size;
-  const chips = [chip(personas, 'contador_personas_uno', 'contador_personas')];
-  const clases = clasesDe(vista.curso);
-  if (vista.curso === 'todos') {
-    chips.push(chip(datos.cursos.length, 'contador_cursos_uno', 'contador_cursos'));
-  } else if (clases) {
-    chips.push(chip(clases.filter((c) => c.estado === 'dada').length, 'contador_clases', 'contador_clases'));
-    const semanas = new Set(lista.map((m) => {
-      const c = clases.find((x) => x.id === m.clase_relacionada);
-      return lunesDe(c ? c.fecha : m.fecha);
-    })).size;
-    chips.push(chip(semanas, 'contador_semanas_uno', 'contador_semanas'));
-  }
-  $('contadores').replaceChildren(...chips);
-}
-
-/* ---------- Línea de tiempo (solo cursos con clases) ---------- */
-function textoDetalle(c) {
-  const cant = datos.mensajes.filter((m) => m.curso === vista.curso && m.clase_relacionada === c.id).length;
-  return `${etiquetaClase(c)} · ${formatearFecha(c.fecha, { weekday: 'short', day: 'numeric', month: 'short' })} · ${temaClase(c)} · ${cant ? contarTexto(cant) : t('sin_mensajes_clase')}`;
-}
-function detallePorDefecto() {
-  const c = clasesDe(vista.curso)?.find((x) => x.id === vista.clase);
-  $('detalle').textContent = c ? textoDetalle(c) : t('linea_ayuda');
-}
-
-function pintarLinea() {
-  const clases = clasesDe(vista.curso);
-  $('seccion-linea').hidden = !clases;
-  $('linea').replaceChildren();
-  if (!clases) return;
-  const semanas = new Map();
-  for (const c of clases) {
-    const k = lunesDe(c.fecha);
-    if (!semanas.has(k)) semanas.set(k, []);
-    semanas.get(k).push(c);
-  }
-  for (const grupo of semanas.values()) {
-    $('linea').append(el('li', { class: 'linea__semana' }, el('ol', { class: 'linea__clases' }, grupo.map((c) => {
-      const cant = datos.mensajes.filter((m) => m.curso === vista.curso && m.clase_relacionada === c.id).length;
-      const tipo = c.estado === 'proxima' ? 'proxima' : cant ? 'mensajes' : 'dada';
-      const elegida = vista.clase === c.id;
-      return el('li', { class: 'linea__clase' }, el('button', {
-        type: 'button',
-        class: `linea__boton${elegida ? ' linea__boton--activo' : ''}`,
-        'aria-pressed': String(elegida),
-        'data-clase': c.id,
-        onclick: () => elegirClase(c.id),
-        onfocus: () => { $('detalle').textContent = textoDetalle(c); },
-        onmouseenter: () => { $('detalle').textContent = textoDetalle(c); },
-        onblur: detallePorDefecto,
-        onmouseleave: detallePorDefecto,
-      },
-      el('span', { class: `punto punto--${tipo}`, 'aria-hidden': 'true' }, cant ? el('span', { class: 'punto__n', text: String(cant) }) : null),
-      el('span', { class: 'linea__nombre', text: etiquetaClase(c) }),
-      el('span', { class: 'linea__fecha', text: formatearFecha(c.fecha, { day: '2-digit', month: '2-digit' }) }),
-      // El nombre accesible empieza con el texto visible y suma el tema y los mensajes.
-      el('span', { class: 'visualmente-oculto', text: `: ${temaClase(c)}. ${contarTexto(cant)}.` })));
-    }))));
-  }
-  detallePorDefecto();
-  // En pantallas angostas, deja a la vista la clase elegida o la última dada.
-  const linea = $('linea');
-  if (linea.scrollWidth > linea.clientWidth) {
-    const dadas = clases.filter((c) => c.estado === 'dada');
-    const foco = vista.clase || (dadas.length ? dadas[dadas.length - 1].id : null);
-    const boton = foco && linea.querySelector(`[data-clase="${CSS.escape(foco)}"]`);
-    if (boton) linea.scrollLeft = Math.max(0, boton.offsetLeft - linea.offsetLeft - linea.clientWidth + boton.offsetWidth + 24);
-  }
-}
-
-function elegirClase(id) {
-  vista.clase = vista.clase === id ? null : id;
-  reiniciarPaginas();
-  pintarLinea();
-  pintarMuro();
-  const boton = document.querySelector(`#linea [data-clase="${CSS.escape(id)}"]`);
-  if (boton) boton.focus();
-}
-
-/* ---------- Muro con páginas que entran en la pantalla ---------- */
+/* ---------- Muro: entra en la pantalla y se pagina ---------- */
 function reiniciarPaginas() { vista.inicio = 0; vista.historial = []; }
 
 function pintarMuro() {
-  const lista = filtrados();
-  const clase = vista.clase ? clasesDe(vista.curso)?.find((c) => c.id === vista.clase) : null;
-  $('subtitulo-mensajes').textContent = clase ? ` · ${etiquetaClase(clase)}`
-    : vista.curso === 'todos' ? '' : ` · ${nombreCurso(datos.cursos, vista.curso)}`;
-  $('quitar-filtro-clase').hidden = !clase;
-
+  const lista = delCurso();
+  const n = lista.length;
+  $('conteo').textContent = n ? `${n} ${n === 1 ? t('mensajes_uno') : t('mensajes_varios')}` : '';
+  $('titulo-muro').hidden = n === 0;
   const ul = $('mensajes');
   ul.replaceChildren();
-  $('vacio').hidden = lista.length > 0 || Boolean(clase);
-  if (!lista.length) {
-    if (clase) ul.append(el('li', { class: 'tarjeta tarjeta--vacia' }, el('p', { text: t('sin_mensajes_clase') })));
-    $('paginacion').hidden = true;
-    return;
-  }
+  $('vacio').hidden = n > 0;
+  $('vacio-texto').textContent = t(vista.curso === 'todos' ? 'vacio_texto_todos' : 'vacio_texto');
+  if (!n) { $('paginacion').hidden = true; return; }
+
   // Suma tarjetas mientras entren en el alto disponible; como mínimo, una.
   // La paginación se muestra antes de medir, para que el alto sea el final.
   $('paginacion').hidden = false;
   const muro = $('muro');
   let fin = vista.inicio;
-  while (fin < lista.length) {
+  while (fin < n) {
     const tarjeta = tarjetaMensaje(lista[fin], datos);
     ul.append(tarjeta);
     if (fin > vista.inicio && muro.scrollHeight > muro.clientHeight + 1) { tarjeta.remove(); break; }
     fin += 1;
   }
   vista.fin = fin;
-  const total = lista.length;
-  const hayMas = fin < total;
+  const hayMas = fin < n;
   $('paginacion').hidden = vista.inicio === 0 && !hayMas;
   $('pagina-anterior').disabled = vista.inicio === 0;
   $('pagina-siguiente').disabled = !hayMas;
-  $('pagina-texto').textContent = `${vista.inicio + 1}–${fin} ${t('de')} ${total}`;
+  $('pagina-texto').textContent = `${vista.inicio + 1}–${fin} ${t('de')} ${n}`;
 }
 
 function paginaSiguiente() {
-  if (vista.fin >= filtrados().length) return;
+  if (vista.fin >= delCurso().length) return;
   vista.historial.push(vista.inicio);
   vista.inicio = vista.fin;
   pintarMuro();
@@ -284,8 +180,6 @@ function pintarTema() { $('boton-tema').setAttribute('aria-pressed', String(tema
 
 function pintarTodo() {
   pintarCursos();
-  pintarContadores();
-  pintarLinea();
   pintarMuro();
   pintarSelectsForm();
   pintarTema();
@@ -294,7 +188,6 @@ function pintarTodo() {
 
 async function iniciar() {
   await iniciarIdioma();
-  if (esDemo()) $('aviso-demo').hidden = false;
   $('enlace-guia').href = GUIA_URL;
   prepararDialogos();
   try {
@@ -309,9 +202,6 @@ async function iniciar() {
   if (document.fonts && document.fonts.ready) await document.fonts.ready;
   pintarTodo();
 
-  $('quitar-filtro-clase').addEventListener('click', () => {
-    vista.clase = null; reiniciarPaginas(); pintarLinea(); pintarMuro(); $('titulo-mensajes').focus();
-  });
   $('pagina-siguiente').addEventListener('click', paginaSiguiente);
   $('pagina-anterior').addEventListener('click', paginaAnterior);
   $('boton-tema').addEventListener('click', () => { aplicarTema(temaActual() === 'oscuro' ? 'claro' : 'oscuro'); pintarTema(); });

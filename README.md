@@ -2,7 +2,7 @@
 
 Los mensajes de las personas que hicieron los cursos de AcademiaQA y de Simoneth Gomez (@SimonethG · @academia_qa). Por ahora tiene dos cursos, TestingAI (en vivo) y la Carrera QA con IA (asincrónica), y se van sumando los cursos que incluyan el muro al final.
 
-- **Muro:** una sola pantalla, sin scroll, con selector de curso, contadores y los mensajes paginados. Con TestingAI elegido se ve además la línea de clases: cada punto es una clase y se enciende cuando tiene mensajes.
+- **Muro:** una sola pantalla, sin scroll y con pocos elementos: el título, una línea que explica qué es, el selector de curso, un botón «Dejar mi mensaje» y los mensajes, que se pasan de página con flechas si no entran.
 - **Widget:** `embed.html?curso=...`, para que la página de cada curso en www.simonethg.com y academiaqa.com muestre sus propios mensajes.
 - **Datos abiertos:** `data/testimonios.json`, un JSON público que cualquier sitio puede leer.
 
@@ -34,19 +34,18 @@ La página y el widget, además, vuelven a validar cada entrada en el navegador 
    }
    ```
 2. Creá la carpeta `data/testimonios/nombre-del-curso/` con un archivo vacío `.gitkeep`.
-3. Si el curso tiene clases en vivo con fecha, creá un archivo como `data/clases-testingai.json` y poné su ruta en `clases`; el muro muestra la línea de clases cuando se elige ese curso. Si es asincrónico, dejá `"clases": null`.
+3. Si el curso tiene clases en vivo, creá un archivo como `data/clases-testingai.json` y poné su ruta en `clases`: el formulario va a ofrecer elegir la clase relacionada y la tarjeta la muestra. Si es asincrónico, dejá `"clases": null`.
 4. Corré `npm test` y `npm run validar`. El curso aparece solo en el selector del muro y del formulario, y en el widget con `?curso=nombre-del-curso`.
 
 ## Estructura
 
 ```
-index.html                     Muro (una pantalla) con los diálogos «Dejar mi mensaje» y «Privacidad»
+index.html                     Muro (una pantalla) con las ventanas «Dejar mi mensaje» y «Privacidad»
 embed.html                     Widget para insertar en otros sitios
 data/cursos.json               Cursos habilitados
 data/clases-testingai.json     Clases de la cohorte TestingAI 2026-10
 data/testimonios/<curso>/      Un archivo por mensaje (lo que suman los alumnos)
 data/testimonios.json          Índice público generado con npm run generar (no se edita a mano)
-data/ejemplos.json             Mensajes de muestra de los dos cursos; solo se ven con ?demo=1
 assets/js/validar.js           Reglas compartidas por el muro, el widget y las acciones de GitHub
 assets/js/                     Resto del código (sin dependencias ni librerías externas)
 assets/css/estilos.css         Estilos (modo claro y oscuro)
@@ -79,7 +78,6 @@ scripts/                       Validador, generador del índice y tests (Node 22
 npm run generar                  # arma data/testimonios.json desde data/testimonios/
 python3 -m http.server 8080      # o cualquier servidor estático
 # http://localhost:8080/                              muro real
-# http://localhost:8080/?demo=1                       con los mensajes de muestra
 # http://localhost:8080/?curso=testingai-vivo         muro de un curso
 # http://localhost:8080/embed.html?curso=carrera-qa-ia
 npm test                         # tests de las reglas
@@ -165,11 +163,13 @@ Solo se publica lo que la persona escribe: su nombre visible, su rol o país (si
 
 ## Calidad
 
-- Accesibilidad: WCAG 2.2 AA, revisada con axe en escritorio y móvil, en modo claro y oscuro, también con los diálogos abiertos. Se usa con teclado (los diálogos atrapan el foco, se cierran con Escape y devuelven el foco) y respeta `prefers-reduced-motion`.
+- Accesibilidad: WCAG 2.2 AA, revisada con axe en escritorio y móvil, en modo claro y oscuro, también con las ventanas abiertas. Se usa con teclado (las ventanas retienen el foco, se cierran con Escape y lo devuelven al botón) y respeta `prefers-reduced-motion`.
 - Una pantalla: el muro calcula cuántas tarjetas entran en el alto disponible y pagina el resto. Si no entra ni una (por ejemplo, con zoom al 200 %), el muro se desplaza por dentro y no se pierde contenido.
 - Seguridad: Content Security Policy sin scripts en línea, todo el texto de los alumnos se pinta con `textContent`, sin dependencias externas, y las acciones de GitHub corren con permisos mínimos y fijadas por SHA.
 - Idiomas: español e inglés.
 
 ## Licencia
 
-Pendiente de definir. La fuente Kanit se distribuye bajo la SIL Open Font License 1.1 (`assets/fonts/OFL.txt`).
+- **Código:** MIT (`LICENSE`).
+- **Textos y mensajes:** Creative Commons Atribución 4.0 Internacional, CC BY 4.0 (`LICENSE-CONTENT`). Quien suma su mensaje acepta publicarlo bajo esa licencia. Para reutilizar un mensaje en otro sitio, citá su nombre visible y el muro.
+- **Fuente Kanit:** SIL Open Font License 1.1 (`assets/fonts/OFL.txt`).

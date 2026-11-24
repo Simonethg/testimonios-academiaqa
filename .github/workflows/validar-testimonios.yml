@@ -44,8 +44,5 @@ jobs:
       - name: Validar cada mensaje
         run: npm run validar
 
-      - name: Validar los ejemplos
-        run: node scripts/validar-testimonios.mjs data/ejemplos.json
-
       - name: Generar el índice público (prueba)
         run: npm run generar

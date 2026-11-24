@@ -1,6 +1,6 @@
 // Widget para insertar en las landings con un iframe:
 // embed.html?curso=testingai-vivo&lang=es&tema=claro&max=6
-import { estado, iniciarIdioma, cargarDatos, tarjetaMensaje, esDemo } from './comun.js';
+import { estado, iniciarIdioma, cargarDatos, tarjetaMensaje } from './comun.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -13,7 +13,6 @@ function avisarAltura() {
 
 async function iniciar() {
   await iniciarIdioma();
-  if (esDemo()) $('aviso-demo').hidden = false;
   if (estado.params.get('titulo') === '0') $('embed-titulo').hidden = true;
   const max = Math.min(Math.max(parseInt(estado.params.get('max') || '6', 10) || 6, 1), 24);
   const curso = estado.params.get('curso');

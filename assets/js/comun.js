@@ -58,21 +58,15 @@ export function formatearFecha(iso, opciones = { day: 'numeric', month: 'short' 
   return new Intl.DateTimeFormat(estado.idioma === 'es' ? 'es-AR' : 'en-US', opciones).format(d);
 }
 
-export const esDemo = () => params.get('demo') === '1';
-export const esEjemplo = (m) => typeof m.id === 'string' && m.id.startsWith('ejemplo-');
 
-/** Carga cursos, clases de los cursos que las tienen y mensajes. Con ?demo=1 suma los ejemplos. */
+/** Carga cursos, clases de los cursos que las tienen y mensajes publicados. */
 export async function cargarDatos() {
   const [cursos, reales] = await Promise.all([leerJSON('data/cursos.json'), leerJSON('data/testimonios.json')]);
   const clasesPorCurso = {};
   await Promise.all(cursos.filter((c) => c.clases).map(async (c) => {
     clasesPorCurso[c.id] = await leerJSON(c.clases);
   }));
-  let lista = Array.isArray(reales) ? reales : [];
-  if (esDemo()) {
-    const ejemplos = await leerJSON('data/ejemplos.json');
-    lista = lista.concat(Array.isArray(ejemplos) ? ejemplos : []);
-  }
+  const lista = Array.isArray(reales) ? reales : [];
   const ctx = {
     cursos: cursos.map((c) => c.id),
     clases: Object.fromEntries(Object.entries(clasesPorCurso).map(([k, v]) => [k, v.clases.map((x) => x.id)])),
@@ -111,11 +105,10 @@ export function tarjetaMensaje(m, { cursos, clasesPorCurso }) {
   const meta = [nombreCurso(cursos, m.curso, true)];
   if (clase) meta.push(etiquetaClase(clase));
   meta.push(formatearFecha(m.fecha, { day: 'numeric', month: 'short', year: 'numeric' }));
-  return el('li', { class: `tarjeta${esEjemplo(m) ? ' tarjeta--ejemplo' : ''}` },
+  return el('li', { class: 'tarjeta' },
     el('blockquote', { class: 'tarjeta__mensaje' }, el('p', { text: m.mensaje })),
     el('p', { class: 'tarjeta__autor' },
       el('span', { class: 'tarjeta__nombre', text: m.nombre_visible }),
-      m.rol_o_pais ? el('span', { class: 'tarjeta__rol', text: `· ${m.rol_o_pais}` }) : null,
-      esEjemplo(m) ? el('span', { class: 'etiqueta-ejemplo', text: t('ejemplo') }) : null),
+      m.rol_o_pais ? el('span', { class: 'tarjeta__rol', text: `· ${m.rol_o_pais}` }) : null),
     el('p', { class: 'tarjeta__meta', text: meta.join(' · ') }));
 }

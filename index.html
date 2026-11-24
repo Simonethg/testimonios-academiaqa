@@ -14,82 +14,52 @@
   <script type="module" src="assets/js/app.js"></script>
 </head>
 <body class="muro">
-  <a class="saltar" href="#mensajes-zona" data-i18n="skip">Saltar al muro</a>
+  <a class="saltar" href="#muro-zona" data-i18n="skip">Saltar al muro</a>
 
-  <header class="cabecera">
-    <div class="contenedor cabecera__fila">
-      <p class="marca"><span class="marca__punto" aria-hidden="true"></span><span data-i18n="brand">AcademiaQA</span></p>
-      <p class="handles handles--cabecera">@SimonethG · @academia_qa</p>
-      <div class="controles">
-        <div class="selector-idioma" role="group" data-i18n-aria="idioma" aria-label="Idioma">
-          <button type="button" class="boton-chico" data-idioma="es" lang="es">ES</button>
-          <button type="button" class="boton-chico" data-idioma="en" lang="en">EN</button>
-        </div>
-        <button type="button" class="boton-chico" id="boton-tema" aria-pressed="false"><span aria-hidden="true" class="icono-tema"></span><span class="texto-tema" data-i18n="tema_oscuro">Modo oscuro</span></button>
+  <header class="cabecera contenedor">
+    <p class="marca"><span class="marca__punto" aria-hidden="true"></span><span data-i18n="brand">AcademiaQA</span></p>
+    <div class="controles">
+      <div class="selector-idioma" role="group" data-i18n-aria="idioma" aria-label="Idioma">
+        <button type="button" class="boton-chico" data-idioma="es" lang="es">ES</button>
+        <button type="button" class="boton-chico" data-idioma="en" lang="en">EN</button>
       </div>
+      <button type="button" class="boton-chico boton-icono" id="boton-tema" aria-pressed="false"><span aria-hidden="true" class="icono-tema"></span><span class="visualmente-oculto" data-i18n="tema_oscuro">Modo oscuro</span></button>
     </div>
   </header>
 
   <main id="contenido" class="contenedor principal">
     <section class="portada" aria-labelledby="titulo">
-      <div class="portada__texto">
-        <h1 id="titulo" data-i18n="titulo">Muro de gratitud</h1>
-        <p class="bajada" data-i18n="bajada"></p>
+      <h1 id="titulo" data-i18n="titulo">Muro de gratitud</h1>
+      <p class="bajada" data-i18n="bajada"></p>
+      <div class="cursos" role="group" data-i18n-aria="cursos" aria-label="Elegí un curso">
+        <div id="botones-cursos" class="cursos__botones"></div>
       </div>
-      <div class="portada__controles">
-        <div class="cursos" role="group" aria-labelledby="etiqueta-cursos">
-          <span id="etiqueta-cursos" class="cursos__etiqueta" data-i18n="cursos">Cursos</span>
-          <div id="botones-cursos" class="cursos__botones"></div>
-        </div>
-        <ul id="contadores" class="contadores" aria-live="polite"></ul>
-      </div>
+      <button type="button" class="boton boton--grande" data-abrir="dialogo-como" data-i18n="cta_dejar">Dejar mi mensaje</button>
     </section>
 
-    <p id="aviso-demo" class="aviso-demo" hidden data-i18n="demo_aviso"></p>
-
-    <section id="seccion-linea" class="linea-zona" aria-labelledby="titulo-linea" hidden>
-      <h2 id="titulo-linea" class="visualmente-oculto" data-i18n="linea_titulo">Clase por clase</h2>
-      <ol id="linea" class="linea"></ol>
-      <div class="linea-zona__pie">
-        <p id="detalle" class="detalle"></p>
-        <ul class="leyenda" aria-hidden="true">
-          <li><span class="punto punto--dada"></span><span data-i18n="leyenda_dada"></span></li>
-          <li><span class="punto punto--mensajes"></span><span data-i18n="leyenda_mensajes"></span></li>
-          <li><span class="punto punto--proxima"></span><span data-i18n="leyenda_proxima"></span></li>
-        </ul>
-      </div>
-    </section>
-
-    <section id="mensajes-zona" class="mensajes-zona" aria-labelledby="titulo-mensajes" tabindex="-1">
-      <div class="mensajes-zona__cabecera">
-        <h2 id="titulo-mensajes" tabindex="-1"><span data-i18n="mensajes_titulo">Mensajes</span><span id="subtitulo-mensajes" class="subtitulo"></span></h2>
-        <button type="button" class="boton-chico" id="quitar-filtro-clase" hidden data-i18n="ver_todos">Ver todos</button>
-      </div>
+    <section id="muro-zona" class="muro-zona" aria-labelledby="titulo-muro" tabindex="-1">
+      <h2 id="titulo-muro" class="conteo"><span id="conteo"></span></h2>
       <div id="muro" class="muro-grilla">
         <ul id="mensajes" class="tarjetas"></ul>
         <div id="vacio" class="vacio" hidden>
           <p class="vacio__titulo" data-i18n="vacio_titulo"></p>
-          <p data-i18n="vacio_texto"></p>
-          <button type="button" class="boton" data-abrir="dialogo-como" data-i18n="cta_dejar">Dejar mi mensaje</button>
+          <p id="vacio-texto" class="vacio__texto"></p>
         </div>
       </div>
       <nav id="paginacion" class="paginacion" data-i18n-aria="paginacion" aria-label="Paginación del muro" hidden>
-        <button type="button" class="boton-chico" id="pagina-anterior"><span aria-hidden="true">←</span> <span data-i18n="anterior">Anterior</span></button>
+        <button type="button" class="boton-chico boton-icono" id="pagina-anterior"><span aria-hidden="true">←</span><span class="visualmente-oculto" data-i18n="anterior">Anterior</span></button>
         <p id="pagina-texto" class="paginacion__texto" aria-live="polite"></p>
-        <button type="button" class="boton-chico" id="pagina-siguiente"><span data-i18n="siguiente">Siguiente</span> <span aria-hidden="true">→</span></button>
+        <button type="button" class="boton-chico boton-icono" id="pagina-siguiente"><span aria-hidden="true">→</span><span class="visualmente-oculto" data-i18n="siguiente">Siguiente</span></button>
       </nav>
     </section>
   </main>
 
-  <footer class="pie">
-    <div class="contenedor pie__fila">
-      <button type="button" class="boton" data-abrir="dialogo-como" data-i18n="cta_dejar">Dejar mi mensaje</button>
-      <p class="pie__privacidad"><span data-i18n="privacidad_corta"></span> <button type="button" class="enlace" data-abrir="dialogo-privacidad" data-i18n="privacidad_titulo">Privacidad</button></p>
-      <a class="pie__qr" href="https://www.simonethg.com">
-        <img src="assets/img/qr-simonethg.svg" width="48" height="48" alt="Código QR que lleva a www.simonethg.com" data-i18n-alt="pie_qr_alt">
-        <span><span class="handles">@SimonethG · @academia_qa</span><span class="pie__sitio" data-i18n="pie_qr">www.simonethg.com</span></span>
-      </a>
-    </div>
+  <footer class="pie contenedor">
+    <a class="pie__qr" href="https://www.simonethg.com">
+      <img src="assets/img/qr-simonethg.svg" width="36" height="36" alt="Código QR que lleva a www.simonethg.com" data-i18n-alt="pie_qr_alt">
+      <span>@SimonethG · @academia_qa</span>
+    </a>
+    <p class="pie__links"><button type="button" class="enlace" data-abrir="dialogo-privacidad" data-i18n="privacidad_titulo">Privacidad</button> · <span data-i18n="pie_licencia">Código MIT · Textos CC BY 4.0</span></p>
   </footer>
 
   <dialog id="dialogo-como" class="dialogo" aria-labelledby="titulo-como">

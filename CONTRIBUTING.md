@@ -40,7 +40,7 @@ Por ejemplo, `data/testimonios/testingai-vivo/2026-12-02-ana.json`, con este con
 | `nombre_visible` | Sí | Cómo querés aparecer: tu nombre, tu nombre y la inicial del apellido o un apodo. Hasta 40 caracteres. |
 | `rol_o_pais` | No | Tu rol o tu país, si querés mostrarlo. Hasta 40 caracteres. |
 | `mensaje` | Sí | Entre 10 y 280 caracteres. Sin email, teléfono, links ni los signos `<` y `>`. |
-| `consentimiento_publicar` | Sí | Tiene que ser `true`. Sin eso, el mensaje no se publica. |
+| `consentimiento_publicar` | Sí | Tiene que ser `true`: aceptás que tu mensaje se publique bajo la licencia CC BY 4.0. Sin eso, no se publica. |
 
 ## 2. Creá el archivo y el Pull Request
 
@@ -66,6 +66,10 @@ npm test          # tests de las reglas
 npm run validar   # valida cada archivo de data/testimonios/
 npm run generar   # arma data/testimonios.json para ver el muro con tu mensaje
 ```
+
+## Licencia
+
+Tu mensaje se publica bajo la licencia Creative Commons Atribución 4.0 (CC BY 4.0): cualquiera puede mostrarlo citando tu nombre visible. El código del muro es MIT.
 
 ## Privacidad
 

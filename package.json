@@ -7,5 +7,6 @@
     "validar": "node scripts/validar-testimonios.mjs",
     "generar": "node scripts/generar-indice.mjs",
     "test": "node --test scripts/validar.test.mjs"
-  }
+  },
+  "license": "MIT"
 }
