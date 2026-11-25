@@ -14,10 +14,11 @@
   <script type="module" src="assets/js/app.js"></script>
 </head>
 <body class="muro">
+  <div class="fondo" aria-hidden="true"></div>
   <a class="saltar" href="#muro-zona" data-i18n="skip">Saltar al muro</a>
 
   <header class="cabecera contenedor">
-    <p class="marca"><span class="marca__punto" aria-hidden="true"></span><span data-i18n="brand">AcademiaQA</span></p>
+    <p class="marca"><span class="marca__logo" aria-hidden="true"></span><span data-i18n="brand">AcademiaQA</span></p>
     <div class="controles">
       <div class="selector-idioma" role="group" data-i18n-aria="idioma" aria-label="Idioma">
         <button type="button" class="boton-chico" data-idioma="es" lang="es">ES</button>
@@ -29,12 +30,18 @@
 
   <main id="contenido" class="contenedor principal">
     <section class="portada" aria-labelledby="titulo">
-      <h1 id="titulo" data-i18n="titulo">Muro de gratitud</h1>
+      <h1 id="titulo" class="titulo"><span data-i18n="titulo_antes">Muro de </span><span class="resaltado" data-i18n="titulo_resaltado">gratitud</span><span data-i18n="titulo_despues"></span></h1>
       <p class="bajada" data-i18n="bajada"></p>
-      <div class="cursos" role="group" data-i18n-aria="cursos" aria-label="Elegí un curso">
-        <div id="botones-cursos" class="cursos__botones"></div>
+      <div class="acciones">
+        <div class="cursos" role="group" data-i18n-aria="cursos" aria-label="Elegí un curso">
+          <span class="cursos__indicador" id="indicador-curso" aria-hidden="true"></span>
+          <div id="botones-cursos" class="cursos__botones"></div>
+        </div>
+        <button type="button" class="boton boton--grande" data-abrir="dialogo-como">
+          <svg class="boton__icono" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M4 20h4L19 9l-4-4L4 16v4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13.5 6.5l4 4" stroke="currentColor" stroke-width="2"/></svg>
+          <span data-i18n="cta_dejar">Dejar mi mensaje</span>
+        </button>
       </div>
-      <button type="button" class="boton boton--grande" data-abrir="dialogo-como" data-i18n="cta_dejar">Dejar mi mensaje</button>
     </section>
 
     <section id="muro-zona" class="muro-zona" aria-labelledby="titulo-muro" tabindex="-1">
@@ -42,6 +49,7 @@
       <div id="muro" class="muro-grilla">
         <ul id="mensajes" class="tarjetas"></ul>
         <div id="vacio" class="vacio" hidden>
+          <img class="vacio__ilustracion" src="assets/img/muro-vacio.svg" width="260" height="170" alt="">
           <p class="vacio__titulo" data-i18n="vacio_titulo"></p>
           <p id="vacio-texto" class="vacio__texto"></p>
         </div>
@@ -57,7 +65,7 @@
   <footer class="pie contenedor">
     <a class="pie__qr" href="https://www.simonethg.com">
       <img src="assets/img/qr-simonethg.svg" width="36" height="36" alt="Código QR que lleva a www.simonethg.com" data-i18n-alt="pie_qr_alt">
-      <span>@SimonethG · @academia_qa</span>
+      <span class="pie__handles"><span>@SimonethG · @academia_qa</span><span class="pie__sitio">www.simonethg.com</span></span>
     </a>
     <p class="pie__links"><button type="button" class="enlace" data-abrir="dialogo-privacidad" data-i18n="privacidad_titulo">Privacidad</button> · <span data-i18n="pie_licencia">Código MIT · Textos CC BY 4.0</span></p>
   </footer>

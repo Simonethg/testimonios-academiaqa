@@ -45,10 +45,13 @@
   "clase": "Clase",
   "bienvenida": "Bienvenida",
   "proximamente": "Próximamente",
-  "embed_titulo": "Lo que dicen quienes hicieron el curso",
+  "embed_titulo": "Mensajes de quienes hicieron el curso",
   "ver_todos": "Ver todos los mensajes",
   "vacio_titulo": "Todavía no hay mensajes.",
   "vacio_texto": "¿Hiciste el curso? Dejá el primero.",
   "vacio_texto_todos": "¿Hiciste alguno de los cursos? Dejá el primero.",
-  "pie_licencia": "Código MIT · Textos CC BY 4.0"
+  "pie_licencia": "Código MIT · Textos CC BY 4.0",
+  "titulo_antes": "Muro de ",
+  "titulo_resaltado": "gratitud",
+  "titulo_despues": ""
 }

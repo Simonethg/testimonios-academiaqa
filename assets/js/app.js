@@ -24,6 +24,17 @@ function pintarCursos() {
     onclick: () => elegirCurso(o.id),
     text: o.texto,
   })));
+  moverIndicador();
+}
+
+// Mueve la pastilla de fondo del selector hasta el curso elegido.
+function moverIndicador() {
+  const activo = document.querySelector('.boton-curso[aria-pressed="true"]');
+  const indicador = $('indicador-curso');
+  if (!activo || !indicador) return;
+  indicador.style.setProperty('--x', `${activo.offsetLeft}px`);
+  indicador.style.setProperty('--ancho', `${activo.offsetWidth}px`);
+  indicador.classList.add('cursos__indicador--listo');
 }
 
 function elegirCurso(id) {
@@ -56,7 +67,7 @@ function pintarMuro() {
   const muro = $('muro');
   let fin = vista.inicio;
   while (fin < n) {
-    const tarjeta = tarjetaMensaje(lista[fin], datos);
+    const tarjeta = tarjetaMensaje(lista[fin], datos, fin - vista.inicio);
     ul.append(tarjeta);
     if (fin > vista.inicio && muro.scrollHeight > muro.clientHeight + 1) { tarjeta.remove(); break; }
     fin += 1;
@@ -211,7 +222,7 @@ async function iniciar() {
   $('formulario').addEventListener('submit', armarEntrada);
   $('boton-copiar').addEventListener('click', copiar);
   let espera;
-  window.addEventListener('resize', () => { clearTimeout(espera); espera = setTimeout(() => { reiniciarPaginas(); pintarMuro(); }, 150); });
+  window.addEventListener('resize', () => { clearTimeout(espera); espera = setTimeout(() => { moverIndicador(); reiniciarPaginas(); pintarMuro(); }, 150); });
 }
 
 iniciar();

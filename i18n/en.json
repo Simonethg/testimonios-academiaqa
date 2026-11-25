@@ -45,10 +45,13 @@
   "clase": "Class",
   "bienvenida": "Welcome",
   "proximamente": "Coming soon",
-  "embed_titulo": "What past students say",
+  "embed_titulo": "Messages from people who took the course",
   "ver_todos": "See all messages",
   "vacio_titulo": "No messages yet.",
   "vacio_texto": "Did you take this course? Leave the first one.",
   "vacio_texto_todos": "Did you take one of the courses? Leave the first one.",
-  "pie_licencia": "Code MIT · Texts CC BY 4.0"
+  "pie_licencia": "Code MIT · Texts CC BY 4.0",
+  "titulo_antes": "",
+  "titulo_resaltado": "Gratitude",
+  "titulo_despues": " wall"
 }

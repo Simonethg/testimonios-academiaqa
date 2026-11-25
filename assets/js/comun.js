@@ -98,17 +98,25 @@ export function el(etiqueta, props = {}, ...hijos) {
   return nodo;
 }
 
-/** Tarjeta de un mensaje. */
-export function tarjetaMensaje(m, { cursos, clasesPorCurso }) {
+/** Tarjeta de un mensaje, con el tono de color de su curso. */
+export function tarjetaMensaje(m, { cursos, clasesPorCurso }, indice = 0) {
   const datosClases = clasesPorCurso && clasesPorCurso[m.curso];
   const clase = m.clase_relacionada && datosClases ? datosClases.clases.find((c) => c.id === m.clase_relacionada) : null;
   const meta = [nombreCurso(cursos, m.curso, true)];
   if (clase) meta.push(etiquetaClase(clase));
   meta.push(formatearFecha(m.fecha, { day: 'numeric', month: 'short', year: 'numeric' }));
-  return el('li', { class: 'tarjeta' },
+  const tono = Math.max(0, cursos.findIndex((c) => c.id === m.curso)) % 4;
+  const inicial = [...m.nombre_visible.trim()][0] || '·';
+  const li = el('li', { class: 'tarjeta', 'data-tono': String(tono) },
     el('blockquote', { class: 'tarjeta__mensaje' }, el('p', { text: m.mensaje })),
-    el('p', { class: 'tarjeta__autor' },
-      el('span', { class: 'tarjeta__nombre', text: m.nombre_visible }),
-      m.rol_o_pais ? el('span', { class: 'tarjeta__rol', text: `· ${m.rol_o_pais}` }) : null),
-    el('p', { class: 'tarjeta__meta', text: meta.join(' · ') }));
+    el('div', { class: 'tarjeta__pie' },
+      el('span', { class: 'tarjeta__avatar', 'aria-hidden': 'true', text: inicial.toUpperCase() }),
+      el('div', { class: 'tarjeta__autor' },
+        el('p', { class: 'tarjeta__nombre' },
+          el('span', { text: m.nombre_visible }),
+          m.rol_o_pais ? el('span', { class: 'tarjeta__rol', text: ` · ${m.rol_o_pais}` }) : null),
+        el('p', { class: 'tarjeta__meta', text: meta.join(' · ') }))));
+  // Variables de animación por CSSOM (permitido por la CSP, a diferencia de style="...").
+  li.style.setProperty('--orden', String(indice));
+  return li;
 }
