@@ -1,5 +1,7 @@
 # Muro de gratitud · AcademiaQA
 
+**Muro:** https://simonethg.github.io/testimonios-academiaqa/ · **Guía para dejar tu mensaje:** [CONTRIBUTING.md](CONTRIBUTING.md)
+
 Los mensajes de las personas que hicieron los cursos de AcademiaQA y de Simoneth Gomez (@SimonethG · @academia_qa). Por ahora tiene dos cursos, TestingAI (en vivo) y la Carrera QA con IA (asincrónica), y se van sumando los cursos que incluyan el muro al final.
 
 - **Muro:** una sola pantalla, sin scroll y con pocos elementos: el título, una línea que explica qué es, el selector de curso, un botón «Dejar mi mensaje» y los mensajes, que se pasan de página con flechas si no entran.
@@ -86,7 +88,7 @@ npm run validar                  # valida cada archivo
 
 ## Publicarlo en GitHub Pages
 
-Cuando Simoneth lo apruebe: repo público `Simonethg/testimonios-academiaqa` y **Settings → Pages → Source: GitHub Actions**. En cada cambio de `main`, la acción valida, genera `data/testimonios.json` y publica en `https://simonethg.github.io/testimonios-academiaqa/`. Si el repo termina con otro nombre, cambiá `REPO_URL` en `assets/js/config.js`.
+El muro está publicado en **https://simonethg.github.io/testimonios-academiaqa/** desde el repo público [`Simonethg/testimonios-academiaqa`](https://github.com/Simonethg/testimonios-academiaqa), con **Settings → Pages → Source: GitHub Actions**. En cada cambio de `main`, la acción valida, genera `data/testimonios.json` y vuelve a publicar. Si algún día cambia el nombre del repo, hay que actualizar `REPO_URL` en `assets/js/config.js`.
 
 Conviene activar en **Settings → Branches** la regla de `main` que pide el check «Validar testimonios» en verde antes de unir.
 
